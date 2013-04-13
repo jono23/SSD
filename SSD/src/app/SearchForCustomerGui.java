@@ -163,6 +163,17 @@ public class SearchForCustomerGui extends JFrame {
 		lblCustomerVerified = new Label("");
 		lblCustomerVerified.setBounds(119, 141, 173, 22);
 		getContentPane().add(lblCustomerVerified);
+		
+		Button btnAmendCustomer = new Button("Alter customer details");
+		btnAmendCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(cboResults.getSelectedItem() != null){
+					SearchForCustomerGui.this.context.alterCustomerDetails((Customer)cboResults.getSelectedItem());
+				}
+			}
+		});
+		btnAmendCustomer.setBounds(26, 169, 129, 22);
+		getContentPane().add(btnAmendCustomer);
 
 		this.setSize(444, 300);
 		this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);

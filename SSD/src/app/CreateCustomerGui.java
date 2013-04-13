@@ -29,6 +29,12 @@ public class CreateCustomerGui extends JFrame {
 	private JLabel lblSecretAns;
 	private JLabel lblMessage;
 
+	private Customer customer;
+	
+	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public CreateCustomerGui(TA context) {
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -98,7 +104,8 @@ public class CreateCustomerGui extends JFrame {
 		Button btnCancel = new Button("Close");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CreateCustomerGui.this.context.startCreateProgramChoice();
+				if(CreateCustomerGui.this.customer == null)
+					CreateCustomerGui.this.context.startCreateProgramChoice();
 				CreateCustomerGui.this.dispose();
 				
 			}
@@ -106,11 +113,16 @@ public class CreateCustomerGui extends JFrame {
 		btnCancel.setBounds(109, 213, 89, 23);
 		getContentPane().add(btnCancel);
 		
-		Button btnCreate = new Button("Create");
+		Button btnCreate = new Button("Ok");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean[] errors = CreateCustomerGui.this.context.newCustomer(txtFirstname.getText(), txtSurname.getText(), 
+				boolean[] errors;
+				if(customer == null)
+					errors = CreateCustomerGui.this.context.newCustomer(txtFirstname.getText(), txtSurname.getText(), 
 						txtAddress.getText(), txtPhoneNo.getText(), txtSecretAnswer.getText());
+				else
+					errors = CreateCustomerGui.this.context.amendCustomer(customer, txtFirstname.getText(), txtSurname.getText(), 
+							txtAddress.getText(), txtPhoneNo.getText(), txtSecretAnswer.getText());
 				//first clear previous colouring
 				clearErrors();
 				
@@ -146,7 +158,10 @@ public class CreateCustomerGui extends JFrame {
 					
 				}else{
 					//display confirmation message
-					CreateCustomerGui.this.lblMessage.setText("Successfully added customer : " + CreateCustomerGui.this.txtSurname.getText());
+					if(customer == null)
+						CreateCustomerGui.this.lblMessage.setText("Successfully added customer : " + CreateCustomerGui.this.txtSurname.getText());
+					else
+						CreateCustomerGui.this.lblMessage.setText("Successfully altered customer : " + CreateCustomerGui.this.txtSurname.getText());
 				}
 					
 			}
@@ -161,6 +176,23 @@ public class CreateCustomerGui extends JFrame {
 		this.setVisible(true);
 		
 	}
+	
+	public CreateCustomerGui(TA ta, Customer customer) {
+		// create window framework
+		this(ta);
+		//load in existing customer values to fields
+		txtFirstname.setText(customer.getFirstname());
+		txtSurname.setText(customer.getSurname());
+		txtAddress.setText(customer.getAddress());
+		txtPhoneNo.setText(customer.getPhoneNo());
+		txtSecretAnswer.setText(customer.getSecretAnswer());
+		
+		//set flag to dictate method choice when creating, or rather amending customer
+		this.customer = customer;
+	}
+	
+	
+
 	private void clearErrors(){
 		CreateCustomerGui.this.txtFirstname.setBackground(Color.WHITE);
 		CreateCustomerGui.this.lblFirstname.setForeground(Color.BLACK);

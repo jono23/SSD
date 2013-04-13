@@ -23,10 +23,10 @@ public class TA implements java.io.Serializable {
 	public void startCreateNewCustomer() {
 		new CreateCustomerGui(this);
 	}
-
-	boolean[] newCustomer(String firstname, String surname, String address,
-			String phoneNo, String secretAnswer) {
-		boolean[] errors = new boolean[5];
+	
+	boolean[] checkCustomer(String firstname, String surname, String address,
+			String phoneNo, String secretAnswer){
+		boolean[] errors = new boolean[6];
 		// start of verify code
 		if (firstname.equals(""))
 			errors[0] = true;
@@ -38,20 +38,52 @@ public class TA implements java.io.Serializable {
 			errors[3] = true;
 		if (secretAnswer.equals(""))
 			errors[4] = true;
-
+		
 		// check if any errors
-		boolean isErrors = false;
 		for (int i = 0; i < 5; i++)
 			if (errors[i] == true)
-				isErrors = true;
-
-		if (!isErrors)
-			// passes verification so create new customer and add to list
-			customers.add(new Customer(firstname, surname, address, phoneNo,
-					secretAnswer));
+				errors[5] = true;		
+			
 		return errors;
 	}
 
+	boolean[] newCustomer(String firstname, String surname, String address,
+			String phoneNo, String secretAnswer) {
+		
+		boolean errors[] = checkCustomer(firstname, surname, address,
+				phoneNo, secretAnswer);
+
+		if (!errors[5]){
+			// passes verification so create new customer and add to list
+			customers.add(new Customer(firstname, surname, address, phoneNo,
+					secretAnswer));
+			// persist all data
+			SSD_app.saveState();
+		}
+		return errors;
+	}
+
+	
+	boolean[] amendCustomer(Customer customer, String firstname, String surname, String address,
+			String phoneNo, String secretAnswer) {
+		
+		boolean errors[] = checkCustomer(firstname, surname, address,
+				phoneNo, secretAnswer);
+
+		if (!errors[5])
+		{
+			// passes verification so amend the customer 
+			customer.setFirstname(firstname);
+			customer.setSurname(surname);
+			customer.setAddress(address);
+			customer.setPhoneNo(phoneNo);
+			customer.setSecretAnswer(secretAnswer);
+			// persist all data
+			SSD_app.saveState();
+		}
+		return errors;
+	}	
+	
 	public void startSearchForCustomer() {
 		new SearchForCustomerGui(this);
 	}
@@ -78,10 +110,12 @@ public class TA implements java.io.Serializable {
 				isErrors = true;
 	
 		if (!isErrors)
-			// passes verification so create new customer and add to list
+			// passes verification so create new accommodation and add to list
 			accommodations.add(new Accommodation(name, Integer.parseInt(rating), Integer.parseInt(noOfRooms), features));
 		//log
 		System.out.println(accommodations);
+		// persist all data
+		SSD_app.saveState();
 	return errors;		
 	}
 
@@ -104,6 +138,8 @@ public class TA implements java.io.Serializable {
 			booking = room.book(date, customer);
 		if(booking != null){
 			customer.addBooking(booking);
+			// persist all data
+			SSD_app.saveState();
 			return true;
 		}
 		return false;
@@ -112,6 +148,10 @@ public class TA implements java.io.Serializable {
 	
 	public boolean verifyCustomer(Customer customer, String msg){
 		return (customer.getSecretAnswer().equalsIgnoreCase(msg));
+	}
+	
+	public void alterCustomerDetails(Customer customer){
+		new CreateCustomerGui(this, customer);
 	}
 	
 	public void quit() {
