@@ -17,7 +17,7 @@ public class AccommodationTest {
 	Accommodation accommodation;
 	@Before
 	public void setUp() throws Exception {
-		accommodation = new Accommodation("test", 5, 2, new ArrayList());
+		accommodation = new Accommodation("test", 5, 2, 6, 8, new ArrayList());
 	}
 
 	@After

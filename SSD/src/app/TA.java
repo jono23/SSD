@@ -24,6 +24,12 @@ public class TA implements java.io.Serializable {
 		new CreateCustomerGui(this);
 	}
 	
+	public void deleteCustomer(Customer customer){
+		customers.remove(customer);
+		// persist all data
+		SSD_app.saveState();
+	}
+	
 	boolean[] checkCustomer(String firstname, String surname, String address,
 			String phoneNo, String secretAnswer){
 		boolean[] errors = new boolean[6];
@@ -92,26 +98,39 @@ public class TA implements java.io.Serializable {
 		new AddAccommodationGui(this);
 	}
 	
-	boolean[] addAccommodation(String name, String rating, String noOfRooms, ArrayList<String> features){
+	boolean[] addAccommodation(String name, String rating, String singleRooms, String doubleRooms, String familyRooms, ArrayList<String> features){
 			
-		boolean[] errors = new boolean[3];
+		//first make empty strings into 0's
+		if (singleRooms.equals(""))
+			singleRooms = "0";
+		if (doubleRooms.equals(""))
+			doubleRooms = "0";
+		if (familyRooms.equals(""))
+			familyRooms = "0";		
+		
+		boolean[] errors = new boolean[5];
 		// start of verify code
 		if (name.equals(""))
 			errors[0] = true;
 		if (rating.equals(""))
 			errors[1] = true;
-		if (noOfRooms.equals(""))
+		if (!singleRooms.equals("") && !singleRooms.matches("^[0-9]+$"))
 			errors[2] = true;
+		if (!doubleRooms.equals("") && !doubleRooms.matches("^[0-9]+$"))
+			errors[3] = true;
+		if (!familyRooms.equals("") && !familyRooms.matches("^[0-9]+$"))
+			errors[4] = true;
+
 	
 		// check if any errors
 		boolean isErrors = false;
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 5; i++)
 			if (errors[i] == true)
 				isErrors = true;
 	
 		if (!isErrors)
 			// passes verification so create new accommodation and add to list
-			accommodations.add(new Accommodation(name, Integer.parseInt(rating), Integer.parseInt(noOfRooms), features));
+			accommodations.add(new Accommodation(name, Integer.parseInt(rating), Integer.parseInt(singleRooms), Integer.parseInt(doubleRooms), Integer.parseInt(familyRooms), features));
 		//log
 		System.out.println(accommodations);
 		// persist all data

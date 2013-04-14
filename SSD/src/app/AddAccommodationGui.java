@@ -25,7 +25,7 @@ public class AddAccommodationGui extends JFrame {
 		private TA context;
 		private JTextField txtName;
 		private JTextField txtRating;
-		private JTextField txtNoOfRooms;
+		private JTextField txtNoOfSingleRooms;
 		private JTextField txtFeature;
 		private JLabel lblname;
 		private JLabel lblRating;
@@ -34,6 +34,10 @@ public class AddAccommodationGui extends JFrame {
 		private JLabel lblMessage;
 		private JTextArea txtFeatures;
 		private ArrayList<String> features;
+		private JTextField txtNoOfDoubleRooms;
+		private JTextField txtNoOfFamilyRooms;
+		private JLabel lblNumberOfFamilyRooms;
+		private JLabel lblNumberOfDoubleRooms;
 
 		public AddAccommodationGui(TA context) {
 			features = new ArrayList<String>();
@@ -63,13 +67,13 @@ public class AddAccommodationGui extends JFrame {
 			getContentPane().add(txtRating);
 			txtRating.setColumns(10);
 			
-			txtNoOfRooms = new JTextField();
-			txtNoOfRooms.setBounds(160, 92, 118, 20);
-			getContentPane().add(txtNoOfRooms);
-			txtNoOfRooms.setColumns(10);
+			txtNoOfSingleRooms = new JTextField();
+			txtNoOfSingleRooms.setBounds(160, 92, 118, 20);
+			getContentPane().add(txtNoOfSingleRooms);
+			txtNoOfSingleRooms.setColumns(10);
 			
 			txtFeature = new JTextField();
-			txtFeature.setBounds(160, 123, 118, 20);
+			txtFeature.setBounds(160, 222, 118, 20);
 			getContentPane().add(txtFeature);
 			txtFeature.setColumns(10);
 			
@@ -85,7 +89,7 @@ public class AddAccommodationGui extends JFrame {
 			lblRating.setBounds(76, 64, 74, 14);
 			getContentPane().add(lblRating);
 			
-			lblNoOfRooms = new JLabel("Number of rooms");
+			lblNoOfRooms = new JLabel("Number of single rooms");
 			lblNoOfRooms.setFont(new Font("Tahoma", Font.PLAIN, 11));
 			lblNoOfRooms.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblNoOfRooms.setBounds(10, 95, 140, 14);
@@ -94,18 +98,18 @@ public class AddAccommodationGui extends JFrame {
 			lblFeature = new JLabel("Features");
 			lblFeature.setFont(new Font("Tahoma", Font.PLAIN, 11));
 			lblFeature.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFeature.setBounds(76, 126, 74, 14);
+			lblFeature.setBounds(76, 225, 74, 14);
 			getContentPane().add(lblFeature);
 						
 			txtFeatures = new JTextArea();
 			txtFeatures.setBackground(SystemColor.control);
-			txtFeatures.setBounds(160, 154, 118, 72);
+			txtFeatures.setBounds(160, 263, 118, 72);
 			getContentPane().add(txtFeatures);
 
 
 			
 			
-			this.setSize(400, 310);
+			this.setSize(396, 429);
 			this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);
 			//this.setLocationRelativeTo(null);
 			//this.setLocationByPlatform(true);
@@ -119,14 +123,14 @@ public class AddAccommodationGui extends JFrame {
 					
 				}
 			});
-			btnCancel.setBounds(106, 239, 89, 23);
+			btnCancel.setBounds(120, 358, 89, 23);
 			getContentPane().add(btnCancel);
 			
 			Button btnCreate = new Button("Create");
 			btnCreate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					boolean[] errors = AddAccommodationGui.this.context.addAccommodation(txtName.getText(), txtRating.getText(), 
-							txtNoOfRooms.getText(), features);
+							txtNoOfSingleRooms.getText(), txtNoOfDoubleRooms.getText(), txtNoOfFamilyRooms.getText(), features);
 					//first clear previous colouring
 					clearErrors();
 					
@@ -148,8 +152,16 @@ public class AddAccommodationGui extends JFrame {
 							AddAccommodationGui.this.lblRating.setForeground(Color.RED);
 						}
 						if(errors[2]){					
-							AddAccommodationGui.this.txtNoOfRooms.setBackground(Color.RED);
+							AddAccommodationGui.this.txtNoOfSingleRooms.setBackground(Color.RED);
 							AddAccommodationGui.this.lblNoOfRooms.setForeground(Color.RED);
+						}						
+						if(errors[3]){					
+							AddAccommodationGui.this.txtNoOfDoubleRooms.setBackground(Color.RED);
+							AddAccommodationGui.this.lblNumberOfDoubleRooms.setForeground(Color.RED);
+						}						
+						if(errors[4]){					
+							AddAccommodationGui.this.txtNoOfFamilyRooms.setBackground(Color.RED);
+							AddAccommodationGui.this.lblNumberOfFamilyRooms.setForeground(Color.RED);
 						}
 					
 						
@@ -160,7 +172,7 @@ public class AddAccommodationGui extends JFrame {
 						
 				}
 			});
-			btnCreate.setBounds(205, 239, 89, 23);
+			btnCreate.setBounds(219, 358, 89, 23);
 			getContentPane().add(btnCreate);
 			
 			Button btnAddFeature = new Button("Add feature");
@@ -174,8 +186,30 @@ public class AddAccommodationGui extends JFrame {
 					AddAccommodationGui.this.txtFeatures.setText(featureText);
 				}
 			});
-			btnAddFeature.setBounds(293, 122, 70, 22);
+			btnAddFeature.setBounds(293, 221, 70, 22);
 			getContentPane().add(btnAddFeature);
+			
+			lblNumberOfDoubleRooms = new JLabel("Number of double rooms");
+			lblNumberOfDoubleRooms.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNumberOfDoubleRooms.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			lblNumberOfDoubleRooms.setBounds(10, 120, 140, 14);
+			getContentPane().add(lblNumberOfDoubleRooms);
+			
+			lblNumberOfFamilyRooms = new JLabel("Number of family rooms");
+			lblNumberOfFamilyRooms.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNumberOfFamilyRooms.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			lblNumberOfFamilyRooms.setBounds(10, 148, 140, 14);
+			getContentPane().add(lblNumberOfFamilyRooms);
+			
+			txtNoOfDoubleRooms = new JTextField();
+			txtNoOfDoubleRooms.setColumns(10);
+			txtNoOfDoubleRooms.setBounds(160, 117, 118, 20);
+			getContentPane().add(txtNoOfDoubleRooms);
+			
+			txtNoOfFamilyRooms = new JTextField();
+			txtNoOfFamilyRooms.setColumns(10);
+			txtNoOfFamilyRooms.setBounds(160, 145, 118, 20);
+			getContentPane().add(txtNoOfFamilyRooms);
 			
 			
 		}
@@ -184,7 +218,7 @@ public class AddAccommodationGui extends JFrame {
 			AddAccommodationGui.this.lblname.setForeground(Color.BLACK);
 			AddAccommodationGui.this.txtRating.setBackground(Color.WHITE);
 			AddAccommodationGui.this.lblRating.setForeground(Color.BLACK);
-			AddAccommodationGui.this.txtNoOfRooms.setBackground(Color.WHITE);
+			AddAccommodationGui.this.txtNoOfSingleRooms.setBackground(Color.WHITE);
 			AddAccommodationGui.this.lblNoOfRooms.setForeground(Color.BLACK);
 		}
 }

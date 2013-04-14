@@ -32,7 +32,7 @@ public class SearchForCustomerGui extends JFrame {
 	private JTextField txtSearchTerm;
 	private JComboBox<Customer> cboResults;
 	private Label lblCustomerVerified;
-	private Button btnVerifyCustomer;
+	private Button btnSearch;
 
 	public SearchForCustomerGui(TA context) {
 		addWindowListener(new WindowAdapter() {
@@ -74,29 +74,10 @@ public class SearchForCustomerGui extends JFrame {
 		label.setBounds(196, 13, 78, 22);
 		getContentPane().add(label);
 
-		Button btnSearch = new Button("Search");
+		btnSearch = new Button("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// clear the window
-				cboResults.removeAllItems();
-				// perform search
-				if (SearchForCustomerGui.this.rdbtnSurname.isSelected())
-					for (Customer customer : SearchForCustomerGui.this.context
-							.customerSearch(
-									SearchForCustomerGui.this.txtSearchTerm
-											.getText(), Customer.SURNAME))
-						//add to ui
-						cboResults.addItem(customer);
-				else if (SearchForCustomerGui.this.rdbtnPhoneNo.isSelected())
-					for (Customer customer : SearchForCustomerGui.this.context
-							.customerSearch(
-									SearchForCustomerGui.this.txtSearchTerm
-											.getText(), Customer.PHONENO))
-						cboResults.addItem(customer);
-				//else
-					// no search criteria selected
-					//TODO add label with error message
-				
+				performSearch();
 			}
 		});
 		btnSearch.setBounds(311, 27, 70, 22);
@@ -129,7 +110,9 @@ public class SearchForCustomerGui extends JFrame {
 		btnBookRoom.setBounds(311, 169, 70, 22);
 		getContentPane().add(btnBookRoom);
 		
-		btnVerifyCustomer = new Button("Verify customer");
+
+		
+		Button btnVerifyCustomer = new Button("Verify customer");
 		btnVerifyCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(cboResults.getSelectedItem() != null)
@@ -169,16 +152,65 @@ public class SearchForCustomerGui extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(cboResults.getSelectedItem() != null){
 					SearchForCustomerGui.this.context.alterCustomerDetails((Customer)cboResults.getSelectedItem());
+					//refresh results
+					performSearch();
 				}
 			}
 		});
 		btnAmendCustomer.setBounds(26, 169, 129, 22);
 		getContentPane().add(btnAmendCustomer);
+		
+		Button btnDeleteCustomer = new Button("Delete customer");
+		btnDeleteCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(cboResults.getSelectedItem() != null){
+				//dialog to confirm deletion
+				int n = JOptionPane.showConfirmDialog(
+				    SearchForCustomerGui.this,
+				    "Would you sure that you want to delete" + ((Customer)cboResults.getSelectedItem()).getFirstname()
+				    + " " + ((Customer)cboResults.getSelectedItem()).getSurname() + "?",
+				    "An Inane Question",
+				    JOptionPane.YES_NO_OPTION);
+				if(n == JOptionPane.YES_OPTION){
+				// remove the selected customer & show confirmation
+					SearchForCustomerGui.this.context.deleteCustomer((Customer)cboResults.getSelectedItem());
+					JOptionPane.showMessageDialog(SearchForCustomerGui.this, "Customer deleted.");
+				//refresh results
+					performSearch();
+					
+					}
+				}
+			}
+		});
+		btnDeleteCustomer.setBounds(177, 204, 115, 22);
+		getContentPane().add(btnDeleteCustomer);
 
 		this.setSize(444, 300);
 		this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);
 		//this.setLocationRelativeTo(null);
 		//this.setLocationByPlatform(true);
 		this.setVisible(true);
+	}
+	
+	public void performSearch(){
+		// clear the window
+		cboResults.removeAllItems();
+		// perform search
+		if (SearchForCustomerGui.this.rdbtnSurname.isSelected())
+			for (Customer customer : SearchForCustomerGui.this.context
+					.customerSearch(
+							SearchForCustomerGui.this.txtSearchTerm
+									.getText(), Customer.SURNAME))
+				//add to ui
+				cboResults.addItem(customer);
+		else if (SearchForCustomerGui.this.rdbtnPhoneNo.isSelected())
+			for (Customer customer : SearchForCustomerGui.this.context
+					.customerSearch(
+							SearchForCustomerGui.this.txtSearchTerm
+									.getText(), Customer.PHONENO))
+				cboResults.addItem(customer);
+		//else
+			// no search criteria selected
+			//do nothing			
 	}
 }
