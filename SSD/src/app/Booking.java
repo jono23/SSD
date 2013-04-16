@@ -9,13 +9,15 @@ public class Booking implements Serializable{
 	 */
 	private static final long serialVersionUID = -1186456523738959662L;
 	Customer customer;
+	Date date;
 	Date dateOfBooking;
 	Bookable room;
 	
-	public Booking(Bookable room, Customer customer, Date date) {
+	public Booking(Bookable room, Date date ,Customer customer, Date dateOfBooking) {
 		super();
 		this.customer = customer;
-		this.dateOfBooking = date;
+		this.date = date;
+		this.dateOfBooking = dateOfBooking;
 		this.room = room;
 	}
 
@@ -37,10 +39,15 @@ public class Booking implements Serializable{
 
 	
 	public void remove(){
+	System.out.println("remove");
 		room.removeBooking(this);
 		customer.removeBooking(this);
 	}
 	
+	public Date getDate() {
+		return date;
+	}
+
 	@Override
 	public String toString() {
 		return customer.getSurname();

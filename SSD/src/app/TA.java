@@ -1,6 +1,5 @@
 package app;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -210,9 +209,9 @@ public class TA implements java.io.Serializable {
 	
 
 	
-	public void editBooking(Booking booking)
+	public void editBooking(AccommodationInfoGui accommodationInfoGui, Booking booking)
 	{
-		new BookingInfoGui(booking, this);
+		new BookingInfoGui(booking, this, accommodationInfoGui);
 	}
 	
 	public void removeBooking(Booking booking)
@@ -220,6 +219,9 @@ public class TA implements java.io.Serializable {
 		booking.remove();
 	}
 
+	public void refreshAccommodationInfo(AccommodationInfoGui accommodationInfoGui){
+		accommodationInfoGui.updateTblBookings();
+	}
 	
 	
 	

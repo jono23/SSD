@@ -28,7 +28,7 @@ public abstract class Bookable implements Serializable{
 
 	public Booking book(Date date, Customer customer){
 		if (!isBooked(date)){
-			Booking booking = new Booking(this, customer, new Date(System.currentTimeMillis()));
+			Booking booking = new Booking(this, date, customer, new Date(System.currentTimeMillis()));
 			calendar.put(date, booking);
 			return booking;
 		}
@@ -49,7 +49,11 @@ public abstract class Bookable implements Serializable{
 		return false;
 	}	
 	public void removeBooking(Booking booking){
-		calendar.remove(booking);
+		System.out.println(calendar.get(booking.getDate()));
+		System.out.println(booking);
+		if(calendar.get(booking.getDate()) == booking)
+			System.out.println(calendar.remove(booking.getDate()));
+		
 	}
 
 }
