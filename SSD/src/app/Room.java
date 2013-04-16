@@ -43,6 +43,10 @@ public class Room extends Bookable {
 		return "Room number=" + number + "," + roomType;
 	}
 	
+	public int getRoomNo(){
+		return number;
+	}
+	
 
 	
 }

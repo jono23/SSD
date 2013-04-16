@@ -48,7 +48,7 @@ public class ProgramChoiceGui extends JFrame {
 				ProgramChoiceGui.this.context.quit();
 			}
 		});
-		btnExit.setBounds(198, 99, 89, 23);
+		btnExit.setBounds(300, 25, 89, 23);
 		getContentPane().add(btnExit);
 		
 		JButton btnAddAccommodation = new JButton("Add Accommodation");
@@ -61,8 +61,19 @@ public class ProgramChoiceGui extends JFrame {
 		});
 		btnAddAccommodation.setBounds(22, 72, 146, 50);
 		getContentPane().add(btnAddAccommodation);
+		
+		JButton btnAccommodationInfo = new JButton("Accommodation Info");
+		btnAccommodationInfo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnAccommodationInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ProgramChoiceGui.this.context.startAccommodationInfoGui();
+				ProgramChoiceGui.this.dispose();
+			}
+		});
+		btnAccommodationInfo.setBounds(178, 72, 159, 50);
+		getContentPane().add(btnAccommodationInfo);
 
-		this.setSize(325, 180);
+		this.setSize(419, 188);
 		
 		//this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);
 		this.setLocationRelativeTo(null);

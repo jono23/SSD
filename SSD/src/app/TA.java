@@ -1,6 +1,10 @@
 package app;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 public class TA implements java.io.Serializable {
 
@@ -172,6 +176,52 @@ public class TA implements java.io.Serializable {
 	public void alterCustomerDetails(Customer customer){
 		new CreateCustomerGui(this, customer);
 	}
+	
+	
+	public void startAccommodationInfoGui()
+	{
+		new AccommodationInfoGui(accommodations, this);
+	}
+	
+	
+	public Object[][] getBookings(Accommodation accommodation, Date startDate)
+	{
+		Object[][] returnArray = new Object[999][8];
+		DateTime dt = new DateTime(startDate);
+		LocalDate ld = dt.toLocalDate();
+		LocalDate sld = ld;
+//		ld.toDate();
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(startDate);
+		
+		for(Room room : accommodation.getRooms()){
+			ld = sld;
+			//insert number / desc of room to table
+			returnArray[room.getRoomNo()-1][0] = room.toString().substring(12);
+			for(int i = 1; i < 8; i++){
+				returnArray[room.getRoomNo()-1][i] = room.getBooking(ld.toDate());
+				ld = ld.plusDays(1);
+				System.out.println(ld);
+			}
+		}
+		
+		return returnArray;
+	}
+	
+
+	
+	public void editBooking(Booking booking)
+	{
+		new BookingInfoGui(booking, this);
+	}
+	
+	public void removeBooking(Booking booking)
+	{
+		booking.remove();
+	}
+
+	
+	
 	
 	public void quit() {
 		// persist all data

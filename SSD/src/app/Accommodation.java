@@ -76,6 +76,10 @@ public class Accommodation implements Serializable{
 		return returnList;
 	}
 	
+	public ArrayList<Room> getRooms(){
+		return rooms;
+	}
+	
 	@Override
 	public String toString() {
 		return name + ", " + rating + " Stars";

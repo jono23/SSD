@@ -97,4 +97,8 @@ public class Customer implements Serializable {
 	public void addBooking(Booking booking){
 		bookings.add(booking);
 	}
+	
+	public void removeBooking(Booking booking){
+		bookings.remove(booking);
+	}
 }

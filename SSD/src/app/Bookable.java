@@ -35,8 +35,10 @@ public abstract class Bookable implements Serializable{
 		return null;
 	}
 	
-	public Customer getBooking(Date date){
-		return calendar.get(date).getCustomer();
+	public Booking getBooking(Date date){
+		if (calendar.containsKey(date))
+			return calendar.get(date);
+		return null;
 	}
 	
 	public boolean cancel(Date date, Customer customer){
@@ -46,5 +48,8 @@ public abstract class Bookable implements Serializable{
 		}
 		return false;
 	}	
+	public void removeBooking(Booking booking){
+		calendar.remove(booking);
+	}
 
 }

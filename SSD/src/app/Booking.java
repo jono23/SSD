@@ -35,10 +35,15 @@ public class Booking implements Serializable{
 		this.dateOfBooking = dateOfBooking;
 	}
 
+	
+	public void remove(){
+		room.removeBooking(this);
+		customer.removeBooking(this);
+	}
+	
 	@Override
 	public String toString() {
-		return "Booking [customer=" + customer + ", dateOfBooking="
-				+ dateOfBooking + ", room=" + room + ", hotel=" + room.getAccommodation() + "]";
+		return customer.getSurname();
 	}
 	
 
