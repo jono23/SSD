@@ -33,8 +33,9 @@ public class SearchForCustomerGui extends JFrame {
 	private JComboBox<Customer> cboResults;
 	private Label lblCustomerVerified;
 	private Button btnSearch;
+	private InsertCustomer insertCustomer;
 
-	public SearchForCustomerGui(TA context) {
+	public SearchForCustomerGui(TA context, InsertCustomer insertCustomer) {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -43,6 +44,7 @@ public class SearchForCustomerGui extends JFrame {
 			}
 		});
 		this.context = context;
+		this.insertCustomer = insertCustomer;
 		getContentPane().setLayout(null);
 
 		txtSearchTerm = new JTextField();
@@ -85,30 +87,17 @@ public class SearchForCustomerGui extends JFrame {
 
 		cboResults = new JComboBox<Customer>();
 		cboResults.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		cboResults.setBounds(10, 100, 403, 27);
+		cboResults.setBounds(10, 112, 403, 27);
 		getContentPane().add(cboResults);
 
 		Button btnCancel = new Button("Close");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SearchForCustomerGui.this.context.startCreateProgramChoice();
 				SearchForCustomerGui.this.dispose();
 			}
 		});
-		btnCancel.setBounds(311, 55, 70, 22);
+		btnCancel.setBounds(311, 84, 70, 22);
 		getContentPane().add(btnCancel);
-		
-		Button btnBookRoom = new Button("Book a room");
-		btnBookRoom.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnBookRoom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(cboResults.getSelectedItem() != null)
-					SearchForCustomerGui.this.context.startCreateBooking((Customer)cboResults.getSelectedItem());
-				
-			}
-		});
-		btnBookRoom.setBounds(311, 169, 70, 22);
-		getContentPane().add(btnBookRoom);
 		
 
 		
@@ -140,52 +129,26 @@ public class SearchForCustomerGui extends JFrame {
 				}
 			}}
 		});
-		btnVerifyCustomer.setBounds(177, 169, 115, 22);
+		btnVerifyCustomer.setBounds(170, 84, 115, 22);
 		getContentPane().add(btnVerifyCustomer);
 		
 		lblCustomerVerified = new Label("");
-		lblCustomerVerified.setBounds(119, 141, 173, 22);
+		lblCustomerVerified.setBounds(10, 89, 173, 22);
 		getContentPane().add(lblCustomerVerified);
 		
-		Button btnAmendCustomer = new Button("Alter customer details");
-		btnAmendCustomer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		Button btnUse = new Button("Use");
+		btnUse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				if(cboResults.getSelectedItem() != null){
-					SearchForCustomerGui.this.context.alterCustomerDetails((Customer)cboResults.getSelectedItem());
-					//refresh results
-					performSearch();
+					SearchForCustomerGui.this.context.useCustomer((Customer)cboResults.getSelectedItem(), SearchForCustomerGui.this.insertCustomer);
+					SearchForCustomerGui.this.dispose();
 				}
 			}
 		});
-		btnAmendCustomer.setBounds(26, 169, 129, 22);
-		getContentPane().add(btnAmendCustomer);
-		
-		Button btnDeleteCustomer = new Button("Delete customer");
-		btnDeleteCustomer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(cboResults.getSelectedItem() != null){
-				//dialog to confirm deletion
-				int n = JOptionPane.showConfirmDialog(
-				    SearchForCustomerGui.this,
-				    "Would you sure that you want to delete" + ((Customer)cboResults.getSelectedItem()).getFirstname()
-				    + " " + ((Customer)cboResults.getSelectedItem()).getSurname() + "?",
-				    "An Inane Question",
-				    JOptionPane.YES_NO_OPTION);
-				if(n == JOptionPane.YES_OPTION){
-				// remove the selected customer & show confirmation
-					SearchForCustomerGui.this.context.deleteCustomer((Customer)cboResults.getSelectedItem());
-					JOptionPane.showMessageDialog(SearchForCustomerGui.this, "Customer deleted.");
-				//refresh results
-					performSearch();
-					
-					}
-				}
-			}
-		});
-		btnDeleteCustomer.setBounds(177, 204, 115, 22);
-		getContentPane().add(btnDeleteCustomer);
+		btnUse.setBounds(311, 55, 70, 22);
+		getContentPane().add(btnUse);
 
-		this.setSize(444, 300);
+		this.setSize(444, 193);
 		this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);
 		//this.setLocationRelativeTo(null);
 		//this.setLocationByPlatform(true);

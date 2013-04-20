@@ -11,6 +11,7 @@ public class Customer implements Serializable {
 	public static final int SURNAME = 1;
 	public static final int PHONENO = 2;
 	private ArrayList<Booking> bookings;
+	private boolean active;
 	
 	String firstname, surname, address, phoneNo, secretAnswer;
 
@@ -23,6 +24,7 @@ public class Customer implements Serializable {
 		this.phoneNo = phoneNo;
 		this.secretAnswer = secretAnswer;
 		bookings = new ArrayList<Booking>();
+		this.active = true;
 	}
 
 	public String getFirstname() {
@@ -101,4 +103,14 @@ public class Customer implements Serializable {
 	public void removeBooking(Booking booking){
 		bookings.remove(booking);
 	}
+
+	public ArrayList<Booking> getBookings() {
+		return bookings;
+	}
+	
+	public void deactivate(){
+		this.active = false;
+	}
+	
+	
 }

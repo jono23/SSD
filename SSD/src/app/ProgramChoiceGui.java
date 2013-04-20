@@ -30,17 +30,6 @@ public class ProgramChoiceGui extends JFrame {
 		btnAdd.setBounds(22, 11, 146, 50);
 		getContentPane().add(btnAdd);
 
-		JButton btnSearch = new JButton("Search");
-		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ProgramChoiceGui.this.context.startSearchForCustomer();
-				ProgramChoiceGui.this.dispose();
-			}
-		});
-		btnSearch.setBounds(178, 11, 109, 50);
-		getContentPane().add(btnSearch);
-
 		JButton btnExit = new JButton("Exit");
 		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnExit.addActionListener(new ActionListener() {
@@ -48,7 +37,7 @@ public class ProgramChoiceGui extends JFrame {
 				ProgramChoiceGui.this.context.quit();
 			}
 		});
-		btnExit.setBounds(300, 25, 89, 23);
+		btnExit.setBounds(347, 99, 89, 23);
 		getContentPane().add(btnExit);
 		
 		JButton btnAddAccommodation = new JButton("Add Accommodation");
@@ -72,8 +61,19 @@ public class ProgramChoiceGui extends JFrame {
 		});
 		btnAccommodationInfo.setBounds(178, 72, 159, 50);
 		getContentPane().add(btnAccommodationInfo);
+		
+		JButton btnCustomerInfo = new JButton("Customer Info");
+		btnCustomerInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ProgramChoiceGui.this.context.startCustomerInfoGui();
+				ProgramChoiceGui.this.dispose();
+			}
+		});
+		btnCustomerInfo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		btnCustomerInfo.setBounds(178, 11, 159, 50);
+		getContentPane().add(btnCustomerInfo);
 
-		this.setSize(419, 188);
+		this.setSize(484, 192);
 		
 		//this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);
 		this.setLocationRelativeTo(null);

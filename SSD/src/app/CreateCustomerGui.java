@@ -28,6 +28,8 @@ public class CreateCustomerGui extends JFrame {
 	private JLabel lblPhoneNo;
 	private JLabel lblSecretAns;
 	private JLabel lblMessage;
+	
+	private Refreshable refreshable;
 
 	private Customer customer;
 	
@@ -161,7 +163,11 @@ public class CreateCustomerGui extends JFrame {
 					if(customer == null)
 						CreateCustomerGui.this.lblMessage.setText("Successfully added customer : " + CreateCustomerGui.this.txtSurname.getText());
 					else
+					{
 						CreateCustomerGui.this.lblMessage.setText("Successfully altered customer : " + CreateCustomerGui.this.txtSurname.getText());
+						//refresh refreshable
+						CreateCustomerGui.this.context.refresh(refreshable);
+					}
 				}
 					
 			}
@@ -177,7 +183,7 @@ public class CreateCustomerGui extends JFrame {
 		
 	}
 	
-	public CreateCustomerGui(TA ta, Customer customer) {
+	public CreateCustomerGui(TA ta, Customer customer, Refreshable refreshable) {
 		// create window framework
 		this(ta);
 		//load in existing customer values to fields
@@ -186,6 +192,8 @@ public class CreateCustomerGui extends JFrame {
 		txtAddress.setText(customer.getAddress());
 		txtPhoneNo.setText(customer.getPhoneNo());
 		txtSecretAnswer.setText(customer.getSecretAnswer());
+		
+		this.refreshable = refreshable;
 		
 		//set flag to dictate method choice when creating, or rather amending customer
 		this.customer = customer;

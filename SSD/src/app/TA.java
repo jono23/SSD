@@ -27,10 +27,20 @@ public class TA implements java.io.Serializable {
 		new CreateCustomerGui(this);
 	}
 	
+	public void startCustomerInfoGui() {
+		new CustomerInfoGui(this);
+	}
+	
 	public void deleteCustomer(Customer customer){
 		customers.remove(customer);
 		// persist all data
 		SSD_app.saveState();
+	}
+	
+	public void deactivateCustomer(Customer customer){
+		customer.deactivate();
+		// persist all data
+		SSD_app.saveState();		
 	}
 	
 	boolean[] checkCustomer(String firstname, String surname, String address,
@@ -93,8 +103,8 @@ public class TA implements java.io.Serializable {
 		return errors;
 	}	
 	
-	public void startSearchForCustomer() {
-		new SearchForCustomerGui(this);
+	public void startSearchForCustomer(InsertCustomer insertCustomer) {
+		new SearchForCustomerGui(this, insertCustomer);
 	}
 	
 	public void startAddAccommodation(){
@@ -146,8 +156,8 @@ public class TA implements java.io.Serializable {
 		return Customer.customerSearch(customers, searchString, searchType);
 	}
 
-	public void startCreateBooking(Customer customer){
-		new CreateBookingGui(this, customer, accommodations);
+	public void startCreateBooking(Customer customer, Refreshable refreshable){
+		new CreateBookingGui(this, customer, accommodations, refreshable);
 	}
 	
 	public ArrayList<Room> searchAccommodation(Accommodation accommodation, Date date){
@@ -172,8 +182,8 @@ public class TA implements java.io.Serializable {
 		return (customer.getSecretAnswer().equalsIgnoreCase(msg));
 	}
 	
-	public void alterCustomerDetails(Customer customer){
-		new CreateCustomerGui(this, customer);
+	public void alterCustomerDetails(Customer customer, Refreshable refreshable){
+		new CreateCustomerGui(this, customer, refreshable);
 	}
 	
 	
@@ -185,7 +195,8 @@ public class TA implements java.io.Serializable {
 	
 	public Object[][] getBookings(Accommodation accommodation, Date startDate)
 	{
-		Object[][] returnArray = new Object[999][8];
+		int len = accommodation.getRooms().size();
+		Object[][] returnArray = new Object[len][8];
 		DateTime dt = new DateTime(startDate);
 		LocalDate ld = dt.toLocalDate();
 		LocalDate sld = ld;
@@ -207,11 +218,23 @@ public class TA implements java.io.Serializable {
 		return returnArray;
 	}
 	
+	public Object[][] getBookings(Customer customer){
+		int len = customer.getBookings().size();
+		Object[][] returnArray = new Object[len][2];
+		int i = 0;
+		for(Booking booking : customer.getBookings()){
+			returnArray[i][0] = booking.getDate();
+			returnArray[i][1] = booking;
+			i ++;
+		}
+		return returnArray;
+	}
+	
 
 	
-	public void editBooking(AccommodationInfoGui accommodationInfoGui, Booking booking)
+	public void editBooking(Refreshable refreshable, Booking booking)
 	{
-		new BookingInfoGui(booking, this, accommodationInfoGui);
+		new BookingInfoGui(booking, this, refreshable);
 	}
 	
 	public void removeBooking(Booking booking)
@@ -219,10 +242,10 @@ public class TA implements java.io.Serializable {
 		booking.remove();
 	}
 
-	public void refreshAccommodationInfo(AccommodationInfoGui accommodationInfoGui){
-		accommodationInfoGui.updateTblBookings();
+	public void useCustomer(Customer customer, InsertCustomer insertCustomer){
+		insertCustomer.setCustomerDetails(customer);
 	}
-	
+
 	
 	
 	public void quit() {
@@ -230,6 +253,10 @@ public class TA implements java.io.Serializable {
 		SSD_app.saveState();
 		// end the program
 		System.exit(0);
+	}
+
+	public void refresh(Refreshable refreshable) {
+		refreshable.refresh();		
 	}
 
 }

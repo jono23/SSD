@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
-public class CreateBookingGui extends JFrame {
+public class CreateBookingGui extends JFrame implements InsertCustomer{
 	/**
 	 * 
 	 */
@@ -26,18 +26,21 @@ public class CreateBookingGui extends JFrame {
 	private JComboBox<Accommodation> cboAccommodations;
 	private JXDatePicker datePicker;
 	private JLabel lblMessageArea;
+	private Refreshable refreshable;
+	private JLabel lblCustomer;
 
 	public CreateBookingGui(TA context, Customer customer,
-			ArrayList<Accommodation> availableAccommodations) {
+			ArrayList<Accommodation> availableAccommodations, Refreshable refreshable) {
 		/**
 		 * 
 		 */
 		this.context = context;
 		this.customer = customer;
 		this.availableAccommodations = availableAccommodations;
+		this.refreshable = refreshable;
 
 		cboAvailableRooms = new JComboBox<Room>();
-		cboAvailableRooms.setBounds(132, 111, 175, 20);
+		cboAvailableRooms.setBounds(137, 99, 175, 20);
 		getContentPane().add(cboAvailableRooms);
 
 		getContentPane().setLayout(null);
@@ -48,7 +51,7 @@ public class CreateBookingGui extends JFrame {
 				CreateBookingGui.this.getRooms();
 			}
 		});
-		datePicker.setBounds(81, 51, 109, 20);
+		datePicker.setBounds(81, 46, 109, 20);
 		getContentPane().add(datePicker);
 
 		cboAccommodations = new JComboBox<Accommodation>();
@@ -57,7 +60,7 @@ public class CreateBookingGui extends JFrame {
 				CreateBookingGui.this.getRooms();
 			}
 		});
-		cboAccommodations.setBounds(238, 51, 157, 20);
+		cboAccommodations.setBounds(238, 46, 157, 20);
 		getContentPane().add(cboAccommodations);
 
 		//fill the combobox with accommdations
@@ -73,24 +76,24 @@ public class CreateBookingGui extends JFrame {
 
 		JLabel lblHotel = new JLabel("Hotel:");
 		lblHotel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblHotel.setBounds(164, 54, 70, 14);
+		lblHotel.setBounds(164, 49, 70, 14);
 		getContentPane().add(lblHotel);
 
 		JLabel lblAvailableRooms = new JLabel("Available rooms:");
 		lblAvailableRooms.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAvailableRooms.setBounds(-5, 114, 127, 14);
+		lblAvailableRooms.setBounds(0, 102, 127, 14);
 		getContentPane().add(lblAvailableRooms);
 
 		JLabel lblDate = new JLabel("Date:");
 		lblDate.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDate.setBounds(10, 54, 61, 14);
+		lblDate.setBounds(10, 49, 61, 14);
 		getContentPane().add(lblDate);
 
 
 
 		lblMessageArea = new JLabel("");
 		lblMessageArea.setForeground(Color.RED);
-		lblMessageArea.setBounds(91, 86, 216, 14);
+		lblMessageArea.setBounds(118, 72, 216, 14);
 		getContentPane().add(lblMessageArea);
 
 		JButton btnBook = new JButton("Book");
@@ -100,15 +103,16 @@ public class CreateBookingGui extends JFrame {
 						(Room)CreateBookingGui.this.cboAvailableRooms
 								.getSelectedItem(),
 						CreateBookingGui.this.customer,
-						CreateBookingGui.this.datePicker.getDate()))
+						CreateBookingGui.this.datePicker.getDate())){
 					CreateBookingGui.this.lblMessageArea.setText("Room booked");
-				else
+				CreateBookingGui.this.context.refresh(CreateBookingGui.this.refreshable);
+				}else
 					CreateBookingGui.this.lblMessageArea.setText("Error: No room booked");
 				//refresh list of rooms
 				CreateBookingGui.this.getRooms();
 			}
 		});
-		btnBook.setBounds(317, 109, 78, 23);
+		btnBook.setBounds(322, 97, 78, 23);
 		getContentPane().add(btnBook);
 
 		JButton btnClose = new JButton("Close");
@@ -117,13 +121,22 @@ public class CreateBookingGui extends JFrame {
 				CreateBookingGui.this.dispose();
 			}
 		});
-		btnClose.setBounds(317, 143, 78, 23);
+		btnClose.setBounds(322, 143, 78, 23);
 		getContentPane().add(btnClose);
 
-		JLabel lblCustomer = new JLabel("customer");
+		lblCustomer = new JLabel("customer");
 		lblCustomer.setText(customer.getFirstname() + " " + customer.getSurname());
 		lblCustomer.setBounds(224, 21, 171, 14);
 		getContentPane().add(lblCustomer);
+		
+		JButton btnCustomerSearch = new JButton("Customer Search");
+		btnCustomerSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CreateBookingGui.this.context.startSearchForCustomer(CreateBookingGui.this);
+			}
+		});
+		btnCustomerSearch.setBounds(149, 143, 163, 23);
+		getContentPane().add(btnCustomerSearch);
 
 		this.setSize(430, 213);
 		this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[1]);
@@ -136,6 +149,12 @@ public class CreateBookingGui extends JFrame {
 		for (Room room : context.searchAccommodation(
 				(Accommodation) cboAccommodations.getSelectedItem(), datePicker.getDate()))
 			cboAvailableRooms.addItem(room);
+	}
+
+	@Override
+	public void setCustomerDetails(Customer customer) {
+		this.customer = customer;	
+		lblCustomer.setText(customer.getFirstname() + " " + customer.getSurname());
 	}
 	
 }
