@@ -80,6 +80,13 @@ public class Accommodation implements Serializable{
 		return rooms;
 	}
 	
+	public ArrayList<Booking> getBookings(){
+		ArrayList<Booking> returnArray = new ArrayList<Booking>();
+		for (Room room : rooms)
+			returnArray.addAll(room.getBookings());
+		return returnArray;
+	}
+	
 	@Override
 	public String toString() {
 		return name + ", " + rating + " Stars";

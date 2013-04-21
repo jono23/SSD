@@ -270,6 +270,12 @@ public class TA implements java.io.Serializable {
 		refreshable.refresh();		
 	}
 
+	public void addReview(Booking booking, String review, Refreshable refreshable){
+		booking.setReview(review);
+		refreshable.refresh();
+		// persist all data
+		SSD_app.saveState();
+	}
 
 
 }

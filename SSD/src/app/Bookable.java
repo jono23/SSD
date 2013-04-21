@@ -1,5 +1,6 @@
 package app;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -56,4 +57,11 @@ public abstract class Bookable implements Serializable{
 		
 	}
 
+	public ArrayList<Booking> getBookings(){
+		ArrayList<Booking> returnArray = new ArrayList<Booking>();
+		for(Booking booking : calendar.values())
+			returnArray.add(booking);
+		return returnArray;
+	}
+	
 }

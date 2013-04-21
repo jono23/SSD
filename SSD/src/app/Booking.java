@@ -12,7 +12,16 @@ public class Booking implements Serializable{
 	Date date;
 	Date dateOfBooking;
 	Bookable room;
+	String review;
 	
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
+	}
+
 	public Booking(Bookable room, Date date ,Customer customer, Date dateOfBooking) {
 		super();
 		this.customer = customer;
