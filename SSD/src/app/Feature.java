@@ -22,7 +22,7 @@ public class Feature extends Bookable{
 
 	@Override
 	public String toString() {
-		return "Feature [name=" + name + "]";
+		return " Feature -- " + name;
 	}
 	
 	

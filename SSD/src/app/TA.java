@@ -164,16 +164,19 @@ public class TA implements java.io.Serializable {
 	
 	public void startCreateBooking(Accommodation accommodation,
 			LocalDate date, int room,
-			Refreshable refreshable) {
-		new CreateBookingGui(this, accommodation, date, room, accommodations, refreshable);
+			Refreshable refreshable, boolean facilities) {
+		new CreateBookingGui(this, accommodation, date, room, accommodations, refreshable, facilities);
 		
 	}
 	
-	public ArrayList<Room> searchAccommodation(Accommodation accommodation, Date date){
-		return accommodation.getFreeRooms(date);
+	public ArrayList<Bookable> searchAccommodation(Accommodation accommodation, Date date, boolean facilities){
+		if(facilities)
+			return accommodation.getFreeFacilities(date);
+		else
+			return accommodation.getFreeRooms(date);
 	}
 	
-	public boolean bookRoom(Room room, Customer customer, Date date){
+	public boolean bookRoom(Bookable room, Customer customer, Date date){
 		Booking booking = null;
 		if(room != null)
 			booking = room.book(date, customer);
@@ -226,6 +229,33 @@ public class TA implements java.io.Serializable {
 		
 		return returnArray;
 	}
+	
+	public Object[][] getBookings(Accommodation accommodation, Date startDate, boolean facilities)
+	{
+		//choose to overload this method as most will be changed as from above (returning rooms)
+		// this one will return facilities
+		int len = accommodation.getFeatures().size();
+		Object[][] returnArray = new Object[len][8];
+		DateTime dt = new DateTime(startDate);
+		LocalDate ld = dt.toLocalDate();
+		LocalDate sld = ld;
+
+		int j = 0;
+		for(Feature feature : accommodation.getFeatures()){
+			ld = sld;
+			//insert number / desc of room to table
+			returnArray[j][0] = feature.toString().substring(12);
+			for(int i = 1; i < 8; i++){
+				returnArray[j][i] = feature.getBooking(ld.toDate());
+				ld = ld.plusDays(1);
+				System.out.println(ld);
+			}
+			j++;
+		}
+		
+		return returnArray;
+	}	
+	
 	
 	public Object[][] getBookings(Customer customer){
 		int len = customer.getBookings().size();

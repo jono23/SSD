@@ -24,27 +24,31 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 	TA context;
 	Customer customer;
 	ArrayList<Accommodation> availableAccommodations;
-	private JComboBox<Room> cboAvailableRooms;
+	private JComboBox<Bookable> cboAvailableRooms;
 	private JComboBox<Accommodation> cboAccommodations;
 	private JXDatePicker datePicker;
 	private JLabel lblMessageArea;
 	private Refreshable refreshable;
 	private JLabel lblCustomer;
-//	private Room lastBooked;
-
+	private boolean facilities;
+	
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public CreateBookingGui(TA context, Accommodation accommodation, LocalDate date,
 			int room, ArrayList<Accommodation> accommodations,
-			Refreshable refreshable) {
+			Refreshable refreshable, boolean facilities) {
 		this(context, null, accommodations, refreshable);
 //		lastBooked = accommodation.getRooms().get(room);
+		this.facilities = facilities;
 		cboAccommodations.setSelectedItem(accommodation);
 		System.out.println(accommodation);
 		datePicker.setDate(date.toDate());
 		getRooms();
-		cboAvailableRooms.setSelectedItem(accommodation.getRooms().get(room));
+		if(facilities)
+			cboAvailableRooms.setSelectedItem(accommodation.getFeatures().get(room));
+		else
+			cboAvailableRooms.setSelectedItem(accommodation.getRooms().get(room));
 		
 	}
 	
@@ -58,7 +62,7 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 		this.availableAccommodations = availableAccommodations;
 		this.refreshable = refreshable;
 
-		cboAvailableRooms = new JComboBox<Room>();
+		cboAvailableRooms = new JComboBox<Bookable>();
 		cboAvailableRooms.setBounds(137, 99, 175, 20);
 		getContentPane().add(cboAvailableRooms);
 
@@ -120,7 +124,7 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 			public void actionPerformed(ActionEvent e) {
 				if(CreateBookingGui.this.customer != null){
 				if(CreateBookingGui.this.context.bookRoom(
-						(Room)CreateBookingGui.this.cboAvailableRooms
+						(Bookable)CreateBookingGui.this.cboAvailableRooms
 								.getSelectedItem(),
 						CreateBookingGui.this.customer,
 						CreateBookingGui.this.datePicker.getDate())){
@@ -171,9 +175,10 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 
 	private void getRooms() {
 		cboAvailableRooms.removeAllItems();
-		for (Room room : context.searchAccommodation(
-				(Accommodation) cboAccommodations.getSelectedItem(), datePicker.getDate()))
-			cboAvailableRooms.addItem(room);
+		
+		for (Bookable bookable : context.searchAccommodation(
+				(Accommodation) cboAccommodations.getSelectedItem(), datePicker.getDate(), facilities))
+			cboAvailableRooms.addItem(bookable);
 //		cboAccommodations.setSelectedItem(lastBooked);
 	}
 

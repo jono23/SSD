@@ -68,11 +68,19 @@ public class Accommodation implements Serializable{
 		return features;
 	}
 	
-	public ArrayList<Room> getFreeRooms(Date date){
-		ArrayList<Room> returnList = new ArrayList<Room>();
+	public ArrayList<Bookable> getFreeRooms(Date date){
+		ArrayList<Bookable> returnList = new ArrayList<Bookable>();
 		for (Room room : rooms)
 			if(!room.isBooked(date))
 				returnList.add(room);
+		return returnList;
+	}
+	
+	public ArrayList<Bookable> getFreeFacilities(Date date){
+		ArrayList<Bookable> returnList = new ArrayList<Bookable>();
+		for (Feature feature : features)
+			if(!feature.isBooked(date))
+				returnList.add(feature);
 		return returnList;
 	}
 	
@@ -84,6 +92,8 @@ public class Accommodation implements Serializable{
 		ArrayList<Booking> returnArray = new ArrayList<Booking>();
 		for (Room room : rooms)
 			returnArray.addAll(room.getBookings());
+		for (Feature feature : features)
+			returnArray.addAll(feature.getBookings());
 		return returnArray;
 	}
 	
