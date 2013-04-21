@@ -50,7 +50,7 @@ public class Booking implements Serializable{
 
 	@Override
 	public String toString() {
-		return customer.getSurname();
+		return customer.getSurname() + " Rm:" + room.toString().substring(12) + " @ " + room.getAccommodation();
 	}
 	
 

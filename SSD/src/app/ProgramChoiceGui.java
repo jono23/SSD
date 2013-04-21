@@ -37,7 +37,7 @@ public class ProgramChoiceGui extends JFrame {
 				ProgramChoiceGui.this.context.quit();
 			}
 		});
-		btnExit.setBounds(347, 99, 89, 23);
+		btnExit.setBounds(248, 133, 89, 23);
 		getContentPane().add(btnExit);
 		
 		JButton btnAddAccommodation = new JButton("Add Accommodation");
@@ -73,7 +73,7 @@ public class ProgramChoiceGui extends JFrame {
 		btnCustomerInfo.setBounds(178, 11, 159, 50);
 		getContentPane().add(btnCustomerInfo);
 
-		this.setSize(484, 192);
+		this.setSize(374, 203);
 		
 		//this.setLocationRelativeTo(ProgramChoiceGui.getFrames()[0]);
 		this.setLocationRelativeTo(null);

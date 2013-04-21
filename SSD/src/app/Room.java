@@ -40,7 +40,7 @@ public class Room extends Bookable {
 			roomType = "Double";
 		if(type == 2)
 			roomType = "Family";
-		return "Room number=" + number + "," + roomType;
+		return "Room number " + number + ", " + roomType;
 	}
 	
 	public int getRoomNo(){

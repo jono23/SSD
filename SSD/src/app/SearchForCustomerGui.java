@@ -39,7 +39,6 @@ public class SearchForCustomerGui extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				SearchForCustomerGui.this.context.startCreateProgramChoice();
 				SearchForCustomerGui.this.dispose();
 			}
 		});

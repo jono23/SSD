@@ -69,9 +69,7 @@ public class Customer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Customer [firstname=" + firstname + ", surname=" + surname
-				+ ", address=" + address + ", phoneNo=" + phoneNo
-				+ ", secretAnswer=" + secretAnswer + "]";
+		return surname + " " + firstname + " : " +address;
 	}
 	
 	public static ArrayList<Customer> customerSearch(ArrayList<Customer> customers, String searchString, int searchType){

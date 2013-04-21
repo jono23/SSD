@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 
 public class TA implements java.io.Serializable {
 
@@ -160,6 +162,13 @@ public class TA implements java.io.Serializable {
 		new CreateBookingGui(this, customer, accommodations, refreshable);
 	}
 	
+	public void startCreateBooking(Accommodation accommodation,
+			LocalDate date, int room,
+			Refreshable refreshable) {
+		new CreateBookingGui(this, accommodation, date, room, accommodations, refreshable);
+		
+	}
+	
 	public ArrayList<Room> searchAccommodation(Accommodation accommodation, Date date){
 		return accommodation.getFreeRooms(date);
 	}
@@ -223,7 +232,9 @@ public class TA implements java.io.Serializable {
 		Object[][] returnArray = new Object[len][2];
 		int i = 0;
 		for(Booking booking : customer.getBookings()){
-			returnArray[i][0] = booking.getDate();
+			DateTime dt = new DateTime(booking.getDate());
+			LocalDate ld = dt.toLocalDate();
+			returnArray[i][0] = ld.toString("MM/dd/yyyy");
 			returnArray[i][1] = booking;
 			i ++;
 		}
@@ -258,5 +269,7 @@ public class TA implements java.io.Serializable {
 	public void refresh(Refreshable refreshable) {
 		refreshable.refresh();		
 	}
+
+
 
 }
