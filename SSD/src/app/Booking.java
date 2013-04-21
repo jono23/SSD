@@ -14,6 +14,10 @@ public class Booking implements Serializable{
 	Bookable room;
 	String review;
 	
+	public Bookable getRoom() {
+		return room;
+	}
+
 	public String getReview() {
 		return review;
 	}
