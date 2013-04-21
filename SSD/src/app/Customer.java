@@ -79,14 +79,14 @@ public class Customer implements Serializable {
 		
 			case Customer.SURNAME:
 				for (Customer customer : customers){
-					if(customer.getSurname().contains(searchString))  
+					if(customer.getSurname().contains(searchString) && customer.isActive())  
 						returnList.add(customer);
 				}
 			break;
 			
 			case Customer.PHONENO:
 				for (Customer customer : customers){
-					if(customer.getPhoneNo().contains(searchString))
+					if(customer.getPhoneNo().contains(searchString) && customer.isActive())  
 						returnList.add(customer);
 				}
 			break;
@@ -94,6 +94,10 @@ public class Customer implements Serializable {
 		return returnList;
 	}
 	
+	public boolean isActive() {
+		return active;
+	}
+
 	public void addBooking(Booking booking){
 		bookings.add(booking);
 	}
@@ -107,7 +111,19 @@ public class Customer implements Serializable {
 	}
 	
 	public void deactivate(){
+		ArrayList<Booking> eraseList = new ArrayList<Booking>();
 		this.active = false;
+		
+		//copy contents from list into remove list to over come concurrency problem when removing object by iterator contained in list. 
+		for(Booking booking : bookings){
+			eraseList.add(booking);		
+		}
+		
+		//here we can call remove function from this list as this list is not altered by remove function
+		//contents of this list will disappear at end of method due to method scope 
+		for(Booking booking : eraseList)
+			booking.remove();
+		//booking objects will be garbage collected as they are no longer referenced 
 	}
 	
 	
