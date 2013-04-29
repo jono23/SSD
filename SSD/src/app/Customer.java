@@ -110,7 +110,9 @@ public class Customer implements Serializable {
 		return bookings;
 	}
 	
-	public void deactivate(){
+	//has to return a list of all current bookings so that they can be processed by the context class. This entity class doent have 
+	// a reference to the TA (context) controller class.
+	public ArrayList<Booking> deactivate(){
 		ArrayList<Booking> eraseList = new ArrayList<Booking>();
 		this.active = false;
 		
@@ -121,9 +123,15 @@ public class Customer implements Serializable {
 		
 		//here we can call remove function from this list as this list is not altered by remove function
 		//contents of this list will disappear at end of method due to method scope 
-		for(Booking booking : eraseList)
-			booking.remove();
-		//booking objects will be garbage collected as they are no longer referenced 
+
+//		Code refactored
+		
+		//		for(Booking booking : eraseList)
+//			
+//			booking.remove();
+//		//booking objects will be garbage collected as they are no longer referenced 
+		
+		return eraseList;
 	}
 	
 	

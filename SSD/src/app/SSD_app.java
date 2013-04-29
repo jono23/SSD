@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class SSD_app {
 	static TA ta;
@@ -15,6 +18,16 @@ public class SSD_app {
 	public static void main(String[] args) {
 		ta = null;
 
+		//configure the logger
+	    try {
+	        CallLogger.setup();
+	      } catch (IOException e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Problems with creating the log files");
+	      }		
+				
+	    LogManager.getLogManager().getLogger(Logger.GLOBAL_LOGGER_NAME).setLevel(Level.ALL);
+		
 		// check for saved data
 		if (new File("data.ser").exists()) {
 

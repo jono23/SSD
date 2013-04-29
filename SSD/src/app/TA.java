@@ -1,11 +1,10 @@
 package app;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
 
 public class TA implements java.io.Serializable {
 
@@ -22,7 +21,7 @@ public class TA implements java.io.Serializable {
 	}
 
 	public void startCreateProgramChoice() {
-		new ProgramChoiceGui(this);
+		new ProgramChoiceGui(this);	
 	}
 
 	public void startCreateNewCustomer() {
@@ -40,7 +39,10 @@ public class TA implements java.io.Serializable {
 	}
 	
 	public void deactivateCustomer(Customer customer){
-		customer.deactivate();
+		ArrayList<Booking> eraseList = customer.deactivate();
+		for(Booking booking : eraseList){
+			removeBooking(booking);
+		}
 		// persist all data
 		SSD_app.saveState();		
 	}
@@ -55,7 +57,7 @@ public class TA implements java.io.Serializable {
 			errors[1] = true;
 		if (address.equals(""))
 			errors[2] = true;
-		if (phoneNo.equals(""))
+		if (!phoneNo.equals("") && !phoneNo.matches("^[0-9]+$"))  
 			errors[3] = true;
 		if (secretAnswer.equals(""))
 			errors[4] = true;
@@ -70,7 +72,6 @@ public class TA implements java.io.Serializable {
 
 	boolean[] newCustomer(String firstname, String surname, String address,
 			String phoneNo, String secretAnswer) {
-		
 		boolean errors[] = checkCustomer(firstname, surname, address,
 				phoneNo, secretAnswer);
 
@@ -127,7 +128,7 @@ public class TA implements java.io.Serializable {
 		// start of verify code
 		if (name.equals(""))
 			errors[0] = true;
-		if (rating.equals(""))
+		if (rating.equals("") || !rating.matches("^[0-9]+$"))
 			errors[1] = true;
 		if (!singleRooms.equals("") && !singleRooms.matches("^[0-9]+$"))
 			errors[2] = true;
@@ -147,7 +148,7 @@ public class TA implements java.io.Serializable {
 			// passes verification so create new accommodation and add to list
 			accommodations.add(new Accommodation(name, Integer.parseInt(rating), Integer.parseInt(singleRooms), Integer.parseInt(doubleRooms), Integer.parseInt(familyRooms), features));
 		//log
-		System.out.println(accommodations);
+//		System.out.println(accommodations);
 		// persist all data
 		SSD_app.saveState();
 	return errors;		
@@ -223,7 +224,7 @@ public class TA implements java.io.Serializable {
 			for(int i = 1; i < 8; i++){
 				returnArray[room.getRoomNo()-1][i] = room.getBooking(ld.toDate());
 				ld = ld.plusDays(1);
-				System.out.println(ld);
+//				System.out.println(ld);
 			}
 		}
 		
@@ -248,7 +249,7 @@ public class TA implements java.io.Serializable {
 			for(int i = 1; i < 8; i++){
 				returnArray[j][i] = feature.getBooking(ld.toDate());
 				ld = ld.plusDays(1);
-				System.out.println(ld);
+//				System.out.println(ld);
 			}
 			j++;
 		}
@@ -280,7 +281,9 @@ public class TA implements java.io.Serializable {
 	
 	public void removeBooking(Booking booking)
 	{
-		booking.remove();
+		//if booking is in the future
+		if(booking.date.compareTo(new Date()) > 0)
+			booking.remove();
 	}
 
 	public void useCustomer(Customer customer, InsertCustomer insertCustomer){
