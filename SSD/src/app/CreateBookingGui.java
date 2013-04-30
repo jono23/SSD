@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 import org.jdesktop.swingx.JXDatePicker;
@@ -33,6 +34,7 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 	private boolean facilities;
 	
 	/**
+	 * @wbp.parser.constructor
 	 * 
 	 */
 	public CreateBookingGui(TA context, Accommodation accommodation, LocalDate date,
@@ -118,8 +120,9 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 
 
 		lblMessageArea = new JLabel("");
+		lblMessageArea.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMessageArea.setForeground(Color.RED);
-		lblMessageArea.setBounds(118, 72, 216, 14);
+		lblMessageArea.setBounds(81, 72, 314, 14);
 		getContentPane().add(lblMessageArea);
 
 		JButton btnBook = new JButton("Book");
@@ -135,9 +138,11 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 //					lastBooked = (Room)CreateBookingGui.this.cboAvailableRooms.getSelectedItem();
 				CreateBookingGui.this.context.refresh(CreateBookingGui.this.refreshable);
 				}else
-					CreateBookingGui.this.lblMessageArea.setText("Error: No room booked");
+					CreateBookingGui.this.lblMessageArea.setText("Error: No room booked, is selected date in the past?");
 					//refresh list of rooms
 					CreateBookingGui.this.getRooms();
+				}else{
+					JOptionPane.showMessageDialog(CreateBookingGui.this, "Please select a customer");
 				}
 			}
 		});

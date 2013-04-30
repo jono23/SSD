@@ -49,6 +49,7 @@ public class TA implements java.io.Serializable {
 		for(Booking booking : eraseList){
 			removeBooking(booking);
 		}
+		currentCustomer = null;
 		// persist all data
 		SSD_app.saveState();		
 	}
@@ -184,6 +185,12 @@ public class TA implements java.io.Serializable {
 	}
 	
 	public boolean bookRoom(Bookable room, Customer customer, Date date){
+		//create date objects to compare that are midnight dates.
+		LocalDate ld = new LocalDate(date);
+		Date bookingMidnightDate = ld.toDate();
+		Date nowMidnightDate = LocalDate.now().toDate();
+		
+		if(bookingMidnightDate.compareTo(nowMidnightDate) >= 0){
 		Booking booking = null;
 		if(room != null)
 			booking = room.book(date, customer);
@@ -192,6 +199,7 @@ public class TA implements java.io.Serializable {
 			// persist all data
 			SSD_app.saveState();
 			return true;
+		}return false;
 		}
 		return false;
 		
@@ -286,16 +294,25 @@ public class TA implements java.io.Serializable {
 		new BookingInfoGui(booking, this, refreshable);
 	}
 	
-	public void removeBooking(Booking booking)
+	public boolean removeBooking(Booking booking)
 	{
-		//if booking is in the future
-		if(booking.date.compareTo(new Date()) > 0)
+		
+		//create date objects to compare that are midnight dates.
+		LocalDate ld = new LocalDate(booking.date);
+		Date bookingMidnightDate = ld.toDate();
+		Date nowMidnightDate = LocalDate.now().toDate();
+		
+		//if booking is today or in the future
+		if(bookingMidnightDate.compareTo(nowMidnightDate) >= 0){		
 			booking.remove();
+			return true;
+		}
+		return false;
 	}
 
 	public void useCustomer(Customer customer, InsertCustomer insertCustomer){
-		insertCustomer.setCustomerDetails(customer);
 		currentCustomer = customer;
+		insertCustomer.setCustomerDetails(customer);
 	}
 
 	
