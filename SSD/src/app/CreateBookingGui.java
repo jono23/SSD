@@ -33,7 +33,7 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 	private boolean facilities;
 	
 	/**
-	 * @wbp.parser.constructor
+	 * 
 	 */
 	public CreateBookingGui(TA context, Accommodation accommodation, LocalDate date,
 			int room, ArrayList<Accommodation> accommodations,
@@ -50,6 +50,9 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 		else
 			cboAvailableRooms.setSelectedItem(accommodation.getRooms().get(room));
 		
+		//see if a customer is selected already
+		if(context.getCurrentCustomer() != null)
+			setCustomerDetails(context.getCurrentCustomer());
 	}
 	
 	public CreateBookingGui(TA context, Customer customer,
@@ -181,6 +184,8 @@ public class CreateBookingGui extends JFrame implements InsertCustomer{
 			cboAvailableRooms.addItem(bookable);
 //		cboAccommodations.setSelectedItem(lastBooked);
 	}
+
+	
 
 	@Override
 	public void setCustomerDetails(Customer customer) {

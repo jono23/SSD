@@ -72,6 +72,15 @@ public class ProgramChoiceGui extends JFrame {
 		btnCustomerInfo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		btnCustomerInfo.setBounds(178, 11, 159, 50);
 		getContentPane().add(btnCustomerInfo);
+		
+		JButton btnEndCall = new JButton("End call / Forget customer");
+		btnEndCall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProgramChoiceGui.this.context.forgetCustomer();
+			}
+		});
+		btnEndCall.setBounds(22, 133, 216, 23);
+		getContentPane().add(btnEndCall);
 
 		this.setSize(374, 203);
 		

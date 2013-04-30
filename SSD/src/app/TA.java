@@ -14,6 +14,12 @@ public class TA implements java.io.Serializable {
 	private static final long serialVersionUID = -3732067769893006562L;
 	private ArrayList<Customer> customers;
 	private ArrayList<Accommodation> accommodations;
+	private Customer currentCustomer;
+
+	public Customer getCurrentCustomer() {
+		return currentCustomer;
+	}
+
 
 	public TA() {
 		customers = new ArrayList<Customer>();
@@ -259,6 +265,7 @@ public class TA implements java.io.Serializable {
 	
 	
 	public Object[][] getBookings(Customer customer){
+		if (customer == null) return null;
 		int len = customer.getBookings().size();
 		Object[][] returnArray = new Object[len][2];
 		int i = 0;
@@ -288,6 +295,7 @@ public class TA implements java.io.Serializable {
 
 	public void useCustomer(Customer customer, InsertCustomer insertCustomer){
 		insertCustomer.setCustomerDetails(customer);
+		currentCustomer = customer;
 	}
 
 	
@@ -308,6 +316,10 @@ public class TA implements java.io.Serializable {
 		refreshable.refresh();
 		// persist all data
 		SSD_app.saveState();
+	}
+
+	public void forgetCustomer() {
+		currentCustomer = null;
 	}
 
 
